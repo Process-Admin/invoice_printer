@@ -370,148 +370,148 @@ module InvoicePrinter
     #
     # If the bank account number is not provided include a note about payment
     # in cash.
-    def build_payment_method_box
-      @push_down -= 3
+    # def build_payment_method_box
+    #   @push_down -= 3
 
-      unless letter?
-        @push_items_table += 18
-      end
+    #   unless letter?
+    #     @push_items_table += 18
+    #   end
 
-      # Match the height of next box if needed
-      min_height = 60
-      if used?(@document.issue_date) || used?(@document.due_date)
-        min_height = (used?(@document.issue_date) && used?(@document.due_date)) ? 75 : 60
-      end
-      @payment_box_height = min_height
+    #   # Match the height of next box if needed
+    #   min_height = 60
+    #   if used?(@document.issue_date) || used?(@document.due_date)
+    #     min_height = (used?(@document.issue_date) && used?(@document.due_date)) ? 75 : 60
+    #   end
+    #   @payment_box_height = min_height
 
-      if big_info_box?
-        @payment_box_height = 110
-      end
+    #   if big_info_box?
+    #     @payment_box_height = 110
+    #   end
 
-      if @document.bank_account_number.empty?
-        @pdf.text_box(
-          @labels[:payment],
-          size: 10,
-          at: [10, y(498) - @push_down],
-          width: x(234)
-        )
-        @pdf.text_box(
-          @labels[:payment_in_cash],
-          size: 10,
-          at: [10, y(483) - @push_down],
-          width: x(234)
-        )
+    #   if @document.bank_account_number.empty?
+    #     @pdf.text_box(
+    #       @labels[:payment],
+    #       size: 10,
+    #       at: [10, y(498) - @push_down],
+    #       width: x(234)
+    #     )
+    #     @pdf.text_box(
+    #       @labels[:payment_in_cash],
+    #       size: 10,
+    #       at: [10, y(483) - @push_down],
+    #       width: x(234)
+    #     )
 
-        @pdf.stroke_rounded_rectangle([0, y(508) - @push_down], x(266), @payment_box_height, 6)
-      else
-        @payment_box_height = 60
-        @push_iban = 0
-        sublabel_change = 0
-        @pdf.text_box(
-          @labels[:payment_by_transfer],
-          size: 10,
-          at: [10, y(498) - @push_down],
-          width: x(234)
-        )
-        @pdf.text_box(
-          "#{@labels[:account_number]}",
-          size: 11,
-          at: [10, y(483) - @push_down],
-          width: x(134)
-        )
-        @pdf.text_box(
-          @document.bank_account_number,
-          size: 13,
-          at: [21, y(483) - @push_down],
-          width: x(234),
-          align: :right
-        )
-        if used? @labels[:sublabels][:account_number]
-          @pdf.text_box(
-            "#{@labels[:sublabels][:account_number]}",
-            size: 10,
-            at: [10, y(468) - @push_down],
-            width: x(334)
-          )
-        else
-          @payment_box_height -= 10
-          sublabel_change -= 10
-        end
-        unless @document.account_swift.empty?
-          @pdf.text_box(
-            "#{@labels[:swift]}",
-            size: 11,
-            at: [10, y(453) - @push_down - sublabel_change],
-            width: x(134)
-          )
-          @pdf.text_box(
-            @document.account_swift,
-            size: 13,
-            at: [21, y(453) -  @push_down - sublabel_change],
-            width: x(234),
-            align: :right
-          )
+    #     @pdf.stroke_rounded_rectangle([0, y(508) - @push_down], x(266), @payment_box_height, 6)
+    #   else
+    #     @payment_box_height = 60
+    #     @push_iban = 0
+    #     sublabel_change = 0
+    #     @pdf.text_box(
+    #       @labels[:payment_by_transfer],
+    #       size: 10,
+    #       at: [10, y(498) - @push_down],
+    #       width: x(234)
+    #     )
+    #     @pdf.text_box(
+    #       "#{@labels[:account_number]}",
+    #       size: 11,
+    #       at: [10, y(483) - @push_down],
+    #       width: x(134)
+    #     )
+    #     @pdf.text_box(
+    #       @document.bank_account_number,
+    #       size: 13,
+    #       at: [21, y(483) - @push_down],
+    #       width: x(234),
+    #       align: :right
+    #     )
+    #     if used? @labels[:sublabels][:account_number]
+    #       @pdf.text_box(
+    #         "#{@labels[:sublabels][:account_number]}",
+    #         size: 10,
+    #         at: [10, y(468) - @push_down],
+    #         width: x(334)
+    #       )
+    #     else
+    #       @payment_box_height -= 10
+    #       sublabel_change -= 10
+    #     end
+    #     unless @document.account_swift.empty?
+    #       @pdf.text_box(
+    #         "#{@labels[:swift]}",
+    #         size: 11,
+    #         at: [10, y(453) - @push_down - sublabel_change],
+    #         width: x(134)
+    #       )
+    #       @pdf.text_box(
+    #         @document.account_swift,
+    #         size: 13,
+    #         at: [21, y(453) -  @push_down - sublabel_change],
+    #         width: x(234),
+    #         align: :right
+    #       )
 
-          if used? @labels[:sublabels][:swift]
-            @pdf.text_box(
-              "#{@labels[:sublabels][:swift]}",
-              size: 10,
-              at: [10, y(438) - @push_down - sublabel_change],
-              width: x(334)
-            )
-            @push_items_table += 10
-          else
-            @payment_box_height -= 10
-            sublabel_change -= 10
-          end
+    #       if used? @labels[:sublabels][:swift]
+    #         @pdf.text_box(
+    #           "#{@labels[:sublabels][:swift]}",
+    #           size: 10,
+    #           at: [10, y(438) - @push_down - sublabel_change],
+    #           width: x(334)
+    #         )
+    #         @push_items_table += 10
+    #       else
+    #         @payment_box_height -= 10
+    #         sublabel_change -= 10
+    #       end
 
-          @payment_box_height += 30
-          @push_iban = 30
-          @push_items_table += 18
-        end
-        unless @document.account_iban.empty?
-          @pdf.text_box(
-            "#{@labels[:iban]}",
-            size: 11,
-            at: [10, y(453) - @push_iban - @push_down - sublabel_change],
-            width: x(134)
-          )
-          @pdf.text_box(
-            @document.account_iban,
-            size: 13,
-            at: [21, y(453) - @push_iban - @push_down - sublabel_change],
-            width: x(234),
-            align: :right
-          )
+    #       @payment_box_height += 30
+    #       @push_iban = 30
+    #       @push_items_table += 18
+    #     end
+    #     unless @document.account_iban.empty?
+    #       @pdf.text_box(
+    #         "#{@labels[:iban]}",
+    #         size: 11,
+    #         at: [10, y(453) - @push_iban - @push_down - sublabel_change],
+    #         width: x(134)
+    #       )
+    #       @pdf.text_box(
+    #         @document.account_iban,
+    #         size: 13,
+    #         at: [21, y(453) - @push_iban - @push_down - sublabel_change],
+    #         width: x(234),
+    #         align: :right
+    #       )
 
-          if used? @labels[:sublabels][:iban]
-            @pdf.text_box(
-              "#{@labels[:sublabels][:iban]}",
-              size: 10,
-              at: [10, y(438) - @push_iban - @push_down - sublabel_change],
-              width: x(334)
-            )
-            @push_items_table += 10
-          else
-            @payment_box_height -= 10
-          end
+    #       if used? @labels[:sublabels][:iban]
+    #         @pdf.text_box(
+    #           "#{@labels[:sublabels][:iban]}",
+    #           size: 10,
+    #           at: [10, y(438) - @push_iban - @push_down - sublabel_change],
+    #           width: x(334)
+    #         )
+    #         @push_items_table += 10
+    #       else
+    #         @payment_box_height -= 10
+    #       end
 
-          @payment_box_height += 30
-          @push_items_table += 18
-        end
+    #       @payment_box_height += 30
+    #       @push_items_table += 18
+    #     end
 
-        if min_height > @payment_box_height
-          @payment_box_height = min_height
-          @push_items_table += 25
-        end
+    #     if min_height > @payment_box_height
+    #       @payment_box_height = min_height
+    #       @push_items_table += 25
+    #     end
 
-        if !@document.account_swift.empty? && !@document.account_iban.empty?
-          @push_items_table += 2
-        end
+    #     if !@document.account_swift.empty? && !@document.account_iban.empty?
+    #       @push_items_table += 2
+    #     end
 
-        @pdf.stroke_rounded_rectangle([0, y(508) - @push_down], x(266), @payment_box_height, 6)
-      end
-    end
+    #     @pdf.stroke_rounded_rectangle([0, y(508) - @push_down], x(266), @payment_box_height, 6)
+    #   end
+    # end
 
     # Build the following info box:
     #
